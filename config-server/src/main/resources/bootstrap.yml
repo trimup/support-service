@@ -1,0 +1,59 @@
+spring:
+  profiles.active: dev
+  application:
+        name: configserver #1
+  cloud:
+      config:
+        server:
+          git:
+            uri: http://git.51qed.cn/r/lihe-configfile.git
+            basedir: target/config
+        enabled: true
+        label: develop
+      bus:
+         enabled: true
+      stream:
+         kafka:
+            binder:
+              zk-nodes: 192.168.1.213:2181
+              brokers: 192.168.1.213:9092
+server:
+  port: 8000
+eureka:
+#    metadataMap:
+#       instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${random.value}}}
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    # Default values comes from org.springframework.cloud.netflix.eurek.EurekaClientConfigBean
+    registryFetchIntervalSeconds: 15
+    instanceInfoReplicationIntervalSeconds: 5
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    # Discovery Server Access
+    serviceUrl:
+      defaultZone: http://root:lihefund@localhost:8010/eureka/
+---
+spring:
+   profiles: test
+   cloud:
+      config:
+         label: develop
+      stream:
+         kafka:
+            binder:
+              zk-nodes: 192.168.1.213:2181
+              brokers: 192.168.1.213:9092
+---
+spring:
+   profiles: prod
+   cloud:
+      config:
+         label: master
+      stream:
+         kafka:
+            binder:
+              zk-nodes: localhost:2181
+              brokers: localhost:9092
+
+
+

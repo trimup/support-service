@@ -1,0 +1,67 @@
+spring:
+  main.show_banner: false
+  application:
+    name: eureka
+server:
+  port: 8010
+
+#  ssl:
+#    key-store: qed.keystore
+#    key-store-password: qedpwd  # Don't use a default password in a real app
+#    key-password: qedpwd
+#    clientAuth: want
+
+security:
+  basic:
+    enabled: true
+  user:
+      name: root
+      password: ${eureka.password}
+management.security.role: SUPERUSER
+
+info:
+  component: Discovery Server
+
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+  server:
+    waitTimeInMsWhenSyncEmpty: 0
+  instance:
+    hostname: localhost
+  password: lihefund
+
+#  password: ${SECURITY_USER_PASSWORD:password}
+logging:
+  level:
+    ROOT: WARN
+  path:  /opt/logs/lihe
+  file:  ${spring.application.name}/${spring.application.name}.log
+
+---
+spring:
+  profiles: peer # not standalone
+eureka:
+#  instance:
+#    hostname: 127.0.0.1
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://root:lifund@127.0.0.0.1:8761/eureka/
+
+---
+spring:
+  profiles: other # not standalone
+
+eureka:
+#  instance:
+#    hostname: 127.0.0.1
+#    nonSecurePort: ${server.port}
+  client:
+    serviceUrl:
+      defaultZone: http://root:lifund@127.0.0.0.1:8761/eureka/
+
+server:
+  port: 8762

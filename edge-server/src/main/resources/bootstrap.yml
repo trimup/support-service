@@ -1,0 +1,36 @@
+# Discovery Server Access
+server:
+  port: 8020
+  servletPath: /edge
+#  ssl:
+#    key-store: classpath:server.jks
+#    key-store-password: password
+#    key-password: password
+allow-non-standard-wrappers: true
+management.add-application-context-header: false
+#management.contextPath: /admin
+info:
+  component: Web Edge Server
+spring:
+  profiles.active: dev
+  main.show_banner: false
+  application:
+     name: edgeserver
+  cloud:
+    config:
+      enabled: true              #打开从config-server中获取配置文件
+      name : edgeserver          #git中寻找的 配置文件的文件名 如果没有设置此项 默认使用 application.name
+      label: develop             #git 分支
+      uri: http://localhost:8000  #config-server 的地址
+---
+spring:
+   profiles: test
+   cloud:
+      config:
+         label: develop
+---
+spring:
+   profiles: prod
+   cloud:
+      config:
+         label: master
