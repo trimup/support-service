@@ -1,0 +1,73 @@
+#debug: true
+
+# PROFILES
+## dev | prod | test
+spring:
+  profiles.active: dev
+  main.show_banner: false
+  application.name: schema-server
+# EMBEDDED SERVER CONFIGURATION (ServerProperties)
+server:
+  port: 8100
+  session-timeout:  30
+#  context-path:
+  tomcat.max-threads:  0
+  tomcat.uri-encoding:  UTF-8
+  undertow.accesslog.enabled: false
+  undertow.accesslog.dir: target/logs
+  undertow.accesslog.pattern: combined
+  compression.enabled: true
+  compression.min-response-size: 1
+# Connection url for the database "51qed"
+# LOGGING
+logging:
+#  path: /var/log
+  file: ${spring.application.name}.log
+#logging.config:  # location of config file (default classpath: logback.xml for logback)
+# levels for loggers, e.g. "logging.level.org.springframework: DEBUG" (TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF)
+#logging.level.org.springframework: DEBUG
+  level.com.qed: DEBUG
+  notify_code: 0
+ # level.org.mybatis: DEBUG
+endpoints:
+  enabled: false
+  sensitive: true
+  info.enabled: true
+  logfile.enabled: true
+  health.enabled: true
+  restart.enabled: true
+  refresh.enabled: true
+  cors.allowed-methods: GET
+ribbon:
+  ConnectTimeout: 300
+  ReadTimeout: 30000
+# Max number of retries on the same server (excluding the first try)
+  MaxAutoRetries: 3
+# Max number of next servers to retry (excluding the first server)
+  MaxAutoRetriesNextServer: 2
+
+service:
+  defaultMinMs: 0
+  defaultMaxMs: 0
+
+eureka:
+  client:
+    cache-refresh-executor-thread-pool-size: 5
+    heartbeat-executor-thread-pool-size : 10
+    registerWithEureka: true
+    fetchRegistry: true
+    # Default values comes from org.springframework.cloud.netflix.eurek.EurekaClientConfigBean
+    registryFetchIntervalSeconds: 15
+    instanceInfoReplicationIntervalSeconds: 5
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    # Discovery Server Access
+    serviceUrl:
+      defaultZone: http://root:lihefund@localhost:8010/eureka/
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: THREAD
+          thread:
+            timeoutInMilliseconds: 100000
